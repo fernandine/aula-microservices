@@ -13,24 +13,28 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.microservice.cambioservice.model.Cambio;
 import br.com.microservice.cambioservice.repositories.CambioRepository;
 
+
+
 @RestController
 @RequestMapping("cambio-service")
 public class CambioController {
-
+	
 	@Autowired
 	private Environment environment;
-
+	
 	@Autowired
 	private CambioRepository repository;
-
+	
 	@GetMapping(value = "/{amount}/{from}/{to}")
-	public Cambio getCambio(@PathVariable("amount") BigDecimal amount, @PathVariable("from") String from,
-			@PathVariable("to") String to) {
+	public Cambio getCambio(
+			@PathVariable("amount") BigDecimal amount,
+			@PathVariable("from") String from,
+			@PathVariable("to") String to
+			) {
 
 		var cambio = repository.findByFromAndTo(from, to);
-		if (cambio == null)
-			throw new RuntimeException("Currency Unsupported");
-
+		if (cambio == null) throw new RuntimeException("Currency Unsupported");
+		
 		var port = environment.getProperty("local.server.port");
 		BigDecimal conversionFactor = cambio.getConversionFactor();
 		BigDecimal convertedValue = conversionFactor.multiply(amount);
