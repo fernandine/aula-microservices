@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+
 @RestController
 @RequestMapping("book-service")
 public class FooBarController {
